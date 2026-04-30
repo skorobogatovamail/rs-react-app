@@ -1,4 +1,5 @@
 import { Component } from 'react';
+
 import styles from './Header.module.css';
 
 type HeaderProps = {

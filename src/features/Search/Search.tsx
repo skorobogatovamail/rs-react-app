@@ -1,6 +1,7 @@
 import { Component } from 'react';
-import { Input } from '../../components/Input/Input';
+
 import { Button } from '../../components/Button/Button';
+import { Input } from '../../components/Input/Input';
 import styles from './Search.module.css';
 
 type SearchProps = {
