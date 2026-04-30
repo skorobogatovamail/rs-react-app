@@ -1,13 +1,17 @@
 import { Component } from 'react';
-import { Search } from '../../features/Search/Search';
-import { Results } from '../../features/Results/Results';
-import styles from './MainPage.module.css';
 
-export class MainPage extends Component {
+import { Results } from '../../features/Results/Results';
+import { Search } from '../../features/Search/Search';
+import styles from './MainPage.module.css';
+import type { MainPageProps, MainPageState, ServerResponse } from './types';
+
+export class MainPage extends Component<MainPageProps, MainPageState> {
   state = {
     items: [],
     searchValue: '',
     lastSubmittedValue: '',
+    isLoading: false,
+    error: null,
   };
 
   handleSearchChange = (value: string) => {
@@ -28,13 +32,62 @@ export class MainPage extends Component {
       searchValue: trimmedValue,
       lastSubmittedValue: trimmedValue,
     });
+
+    this.loadItems(trimmedValue);
+  };
+
+  loadItems = async (searchValue: string) => {
+    this.setState({
+      isLoading: true,
+    });
+
+    const params = new URLSearchParams({ page: '1' });
+
+    if (searchValue) {
+      params.set('name', searchValue);
+    }
+
+    try {
+      const response = await fetch(
+        `https://rickandmortyapi.com/api/character?${params.toString()}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch characters');
+      }
+
+      const data: ServerResponse = await response.json();
+
+      const items = data.results.map((el) => ({
+        id: el.id,
+        title: el.name,
+        description: el.species,
+        image: el.image,
+        link: el.url,
+      }));
+
+      this.setState({
+        items,
+      });
+    } catch (error) {
+      this.setState({
+        error:
+          error instanceof Error ? error.message : 'An unknown error occurred',
+      });
+    } finally {
+      this.setState({
+        isLoading: false,
+      });
+    }
   };
 
   componentDidMount() {
+    const savedSearchValue = localStorage.getItem('searchValue') || '';
     this.setState({
-      searchValue: localStorage.getItem('searchValue') || '',
-      lastSubmittedValue: localStorage.getItem('searchValue') || '',
+      searchValue: savedSearchValue,
+      lastSubmittedValue: savedSearchValue,
     });
+    this.loadItems(savedSearchValue);
   }
 
   render() {
