@@ -39,6 +39,7 @@ export class MainPage extends Component<MainPageProps, MainPageState> {
   loadItems = async (searchValue: string) => {
     this.setState({
       isLoading: true,
+      error: null,
     });
 
     const params = new URLSearchParams({ page: '1' });
@@ -68,9 +69,11 @@ export class MainPage extends Component<MainPageProps, MainPageState> {
 
       this.setState({
         items,
+        error: null,
       });
     } catch (error) {
       this.setState({
+        items: [],
         error:
           error instanceof Error ? error.message : 'An unknown error occurred',
       });
@@ -101,7 +104,11 @@ export class MainPage extends Component<MainPageProps, MainPageState> {
           />
         </section>
         <section className={styles.resultsSection}>
-          <Results items={this.state.items} />
+          <Results
+            items={this.state.items}
+            isLoading={this.state.isLoading}
+            error={this.state.error}
+          />
         </section>
       </div>
     );
