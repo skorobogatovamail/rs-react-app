@@ -1,0 +1,10 @@
+.errorButton {
+  background-color: red;
+  color: white;
+}
+
+.errorButton:hover,
+.errorButton:active {
+  background-color: red;
+  color: white;
+}

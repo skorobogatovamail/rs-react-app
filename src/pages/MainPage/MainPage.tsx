@@ -1,5 +1,6 @@
 import { Component } from 'react';
 
+import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { Results } from '../../features/Results/Results';
 import { Search } from '../../features/Search/Search';
 import styles from './MainPage.module.css';
@@ -96,6 +97,10 @@ export class MainPage extends Component<MainPageProps, MainPageState> {
   render() {
     return (
       <div className={styles.container}>
+        <div className={styles.errorButtonContainer}>
+          <ErrorButton />
+        </div>
+
         <section className={styles.searchSection}>
           <Search
             value={this.state.searchValue}

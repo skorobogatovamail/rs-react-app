@@ -15,14 +15,6 @@ export class Results extends Component<ResultsProps> {
   render() {
     const { items, isLoading, error } = this.props;
 
-    if (items.length === 0) {
-      return (
-        <div className={styles.container}>
-          <h3 className={styles.title}>No results found</h3>
-        </div>
-      );
-    }
-
     if (isLoading) {
       return (
         <div className={styles.container}>
@@ -35,6 +27,14 @@ export class Results extends Component<ResultsProps> {
       return (
         <div className={styles.container}>
           <h3 className={styles.title}>Error: {error}</h3>
+        </div>
+      );
+    }
+
+    if (items.length === 0) {
+      return (
+        <div className={styles.container}>
+          <h3 className={styles.title}>No results found</h3>
         </div>
       );
     }

@@ -1,5 +1,6 @@
-import { Component } from 'react';
 import classNames from 'classnames';
+import { Component } from 'react';
+
 import styles from './Button.module.css';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -10,8 +11,8 @@ export class Button extends Component<ButtonProps> {
   render() {
     return (
       <button
-        className={classNames(styles.button, this.props.className)}
         {...this.props}
+        className={classNames(styles.button, this.props.className)}
       >
         {this.props.children}
       </button>
