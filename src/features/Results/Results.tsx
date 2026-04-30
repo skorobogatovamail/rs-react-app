@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Component } from 'react';
 
 import type { CardType } from '../../components/Card/Card';
@@ -17,7 +18,7 @@ export class Results extends Component<ResultsProps> {
 
     if (isLoading) {
       return (
-        <div className={styles.container}>
+        <div className={classNames(styles.loaderContainer, styles.container)}>
           <Loader />
         </div>
       );

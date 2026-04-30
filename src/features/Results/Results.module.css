@@ -4,6 +4,10 @@
   gap: 32px;
 }
 
+.loaderContainer {
+  align-items: center;
+}
+
 .title {
   text-align: center;
   color: var(--color-accent);
