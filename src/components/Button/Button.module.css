@@ -1,0 +1,19 @@
+.button {
+  padding: 14px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover,
+.button:active {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  outline: none;
+}
+
+.button:active {
+    transform: translateY(2px) scale(0.98);
+  }
