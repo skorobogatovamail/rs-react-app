@@ -3,7 +3,7 @@ import styles from './Input.module.css';
 import classNames from 'classnames';
 
 type InputProps = Omit<
-  React.HTMLAttributes<HTMLInputElement>,
+  React.InputHTMLAttributes<HTMLInputElement>,
   'onChange' | 'value'
 > & {
   value: string;
@@ -12,14 +12,16 @@ type InputProps = Omit<
 
 export class Input extends Component<InputProps> {
   render() {
+    const { value, onChange, className, ...inputProps } = this.props;
     return (
       <div className={classNames(styles.container, this.props.className)}>
         <input
+          {...inputProps}
           type="text"
-          value={this.props.value}
-          onChange={(e) => this.props.onChange(e.target.value)}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
           name="input"
-          className={classNames(styles.input, this.props.className)}
+          className={classNames(styles.input, className)}
         />
       </div>
     );
