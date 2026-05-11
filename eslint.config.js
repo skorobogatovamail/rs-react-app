@@ -9,7 +9,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'coverage']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -23,6 +23,11 @@ export default defineConfig([
     ],
     languageOptions: {
       globals: globals.browser,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
     plugins: {
       'simple-import-sort': simpleImportSort,
