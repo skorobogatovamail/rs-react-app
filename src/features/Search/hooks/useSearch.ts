@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 
+import {
+  SEARCH_VALUE_KEY,
+  useLocalStorage,
+} from '../../../hooks/useLocalStorage';
+
 export const useSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const savedSearchValue =
-    searchParams.get('name') || localStorage.getItem('searchValue') || '';
+  const { read, write, remove } = useLocalStorage(SEARCH_VALUE_KEY);
+  const savedSearchValue = searchParams.get('name') || read() || '';
   const [searchValue, setSearchValue] = useState(savedSearchValue);
 
   const handleSearchChange = (value: string) => {
@@ -16,10 +21,10 @@ export const useSearch = () => {
     const newSearchParams = new URLSearchParams(searchParams);
 
     if (trimmedValue) {
-      localStorage.setItem('searchValue', trimmedValue);
+      write(trimmedValue);
       newSearchParams.set('name', trimmedValue || '');
     } else {
-      localStorage.removeItem('searchValue');
+      remove();
       newSearchParams.delete('name');
     }
 
