@@ -33,6 +33,7 @@ export default defineConfig([
       'simple-import-sort': simpleImportSort,
     },
     rules: {
+      'react/prop-types': 'off',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
     },

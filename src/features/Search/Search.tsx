@@ -1,5 +1,3 @@
-import { Component } from 'react';
-
 import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
 import styles from './Search.module.css';
@@ -10,17 +8,21 @@ type SearchProps = {
   onSubmit: () => void;
 };
 
-export class Search extends Component<SearchProps> {
-  render() {
-    return (
-      <div className={styles.container}>
-        <Input
-          value={this.props.value}
-          onChange={this.props.onChange}
-          placeholder="Search"
-        />
-        <Button onClick={this.props.onSubmit}>Search</Button>
-      </div>
-    );
-  }
-}
+export const Search: React.FC<SearchProps> = ({
+  value,
+  onChange,
+  onSubmit,
+}) => {
+  return (
+    <form
+      className={styles.container}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <Input value={value} onChange={onChange} placeholder="Search" />
+      <Button type="submit">Search</Button>
+    </form>
+  );
+};
