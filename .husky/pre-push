@@ -1,1 +1,11 @@
+#!/usr/bin/env sh
+
+cd "$(dirname "$0")/.." || exit 1
+if [ -r "$HOME/.nvm/alias/default" ]; then
+NVM_VERSION=$(cat "$HOME/.nvm/alias/default")
+NVM_BIN="$HOME/.nvm/versions/node/v${NVM_VERSION}/bin"
+[ -d "$NVM_BIN" ] || NVM_BIN="$HOME/.nvm/versions/node/${NVM_VERSION}/bin"
+export PATH="$NVM_BIN:/usr/local/bin:/opt/homebrew/bin:$PATH"
+fi
+
 npm test
