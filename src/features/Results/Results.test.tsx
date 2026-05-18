@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import { Results } from './Results';
+
+const renderResults = (props: React.ComponentProps<typeof Results>) =>
+  render(
+    <MemoryRouter>
+      <Results {...props} />
+    </MemoryRouter>
+  );
 
 const mockItems = [
   {
@@ -22,7 +30,7 @@ const mockItems = [
 
 describe('Results Component', () => {
   it('renders correct number of items when data is provided', () => {
-    render(<Results items={mockItems} isLoading={false} error={null} />);
+    renderResults({ items: mockItems, isLoading: false, error: null });
     expect(screen.getByText('Results')).toBeInTheDocument();
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();
@@ -30,17 +38,17 @@ describe('Results Component', () => {
   });
 
   it('displays "no results found" message when data array is empty', () => {
-    render(<Results items={[]} isLoading={false} error={null} />);
+    renderResults({ items: [], isLoading: false, error: null });
     expect(screen.getByText('No results found')).toBeInTheDocument();
   });
 
   it('shows loading state while fetching data', () => {
-    render(<Results items={[]} isLoading={true} error={null} />);
+    renderResults({ items: [], isLoading: true, error: null });
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
   it('displays error message when error prop is provided', () => {
-    render(<Results items={[]} isLoading={false} error="Failed to fetch" />);
+    renderResults({ items: [], isLoading: false, error: 'Failed to fetch' });
     expect(screen.getByText('Error: Failed to fetch')).toBeInTheDocument();
   });
 });
