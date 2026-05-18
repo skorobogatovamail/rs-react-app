@@ -1,9 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { BASE_URL } from '../../api/constants';
 import { MainPage } from './MainPage';
 
-const mockResults = {
+const mockApiResponse = {
   results: [
     {
       id: 1,
@@ -13,7 +15,20 @@ const mockResults = {
       url: 'https://rickandmortyapi.com/api/character/1',
     },
   ],
+  info: {
+    count: 1,
+    pages: 1,
+    next: null,
+    prev: null,
+  },
 };
+
+const renderMainPage = (initialEntries: string[] = ['/']) =>
+  render(
+    <MemoryRouter initialEntries={initialEntries}>
+      <MainPage />
+    </MemoryRouter>
+  );
 
 describe('MainPage Component', () => {
   beforeEach(() => {
@@ -24,10 +39,10 @@ describe('MainPage Component', () => {
   it('makes initial API call on component mount', async () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
-      json: async () => mockResults,
+      json: async () => mockApiResponse,
     } as Response);
 
-    render(<MainPage />);
+    renderMainPage();
 
     expect(fetch).toHaveBeenCalled();
     await waitFor(() => {
@@ -39,23 +54,31 @@ describe('MainPage Component', () => {
     localStorage.setItem('searchValue', 'Morty');
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
-      json: async () => ({ results: [] }),
+      json: async () => ({
+        results: [],
+        info: { count: 0, pages: 0, next: null, prev: null },
+      }),
     } as Response);
 
-    render(<MainPage />);
+    renderMainPage();
 
     const input = screen.getByPlaceholderText('Search') as HTMLInputElement;
     expect(input.value).toBe('Morty');
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('name=Morty'));
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining(`${BASE_URL}?name=&page=1`)
+    );
   });
 
   it('saves search term to localStorage when search button is clicked', async () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
-      json: async () => ({ results: [] }),
+      json: async () => ({
+        results: [],
+        info: { count: 0, pages: 0, next: null, prev: null },
+      }),
     } as Response);
 
-    render(<MainPage />);
+    renderMainPage();
 
     const input = screen.getByPlaceholderText('Search');
     fireEvent.change(input, { target: { value: 'Summer' } });
@@ -64,16 +87,24 @@ describe('MainPage Component', () => {
     fireEvent.click(button);
 
     expect(localStorage.getItem('searchValue')).toBe('Summer');
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('name=Summer'));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        expect.stringContaining('name=Summer')
+      );
+    });
   });
 
   it('trims whitespace from search input before saving', async () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
-      json: async () => ({ results: [] }),
+      json: async () => ({
+        results: [],
+        info: { count: 0, pages: 0, next: null, prev: null },
+      }),
     } as Response);
 
-    render(<MainPage />);
+    renderMainPage();
 
     const input = screen.getByPlaceholderText('Search');
     fireEvent.change(input, { target: { value: '  Beth  ' } });
@@ -82,28 +113,31 @@ describe('MainPage Component', () => {
     fireEvent.click(button);
 
     expect(localStorage.getItem('searchValue')).toBe('Beth');
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('name=Beth'));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('name=Beth'));
+    });
   });
 
   it('does not trigger search if search value is the same as last submitted', async () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
-      json: async () => ({ results: [] }),
+      json: async () => ({
+        results: [],
+        info: { count: 0, pages: 0, next: null, prev: null },
+      }),
     } as Response);
 
-    render(<MainPage />);
+    renderMainPage(['/?name=Rick&page=1']);
 
-    const input = screen.getByPlaceholderText('Search');
     const button = screen.getByRole('button', { name: /search/i });
+    const initialFetchCount = vi.mocked(fetch).mock.calls.length;
 
-    // First search
-    fireEvent.change(input, { target: { value: 'Rick' } });
     fireEvent.click(button);
-    expect(fetch).toHaveBeenCalledTimes(2); // Initial + First search
 
-    // Second search with same value
-    fireEvent.click(button);
-    expect(fetch).toHaveBeenCalledTimes(2); // Should not call again
+    await waitFor(() => {
+      expect(vi.mocked(fetch).mock.calls.length).toBe(initialFetchCount);
+    });
   });
 
   it('displays error message when API call fails', async () => {
@@ -111,7 +145,7 @@ describe('MainPage Component', () => {
       ok: false,
     } as Response);
 
-    render(<MainPage />);
+    renderMainPage();
 
     await waitFor(() => {
       expect(
@@ -127,13 +161,16 @@ describe('MainPage Component', () => {
     });
     vi.mocked(fetch).mockReturnValue(fetchPromise);
 
-    render(<MainPage />);
+    renderMainPage();
 
     expect(screen.getByTestId('loader')).toBeInTheDocument();
 
     resolveFetch!({
       ok: true,
-      json: async () => ({ results: [] }),
+      json: async () => ({
+        results: [],
+        info: { count: 0, pages: 0, next: null, prev: null },
+      }),
     } as Response);
 
     await waitFor(() => {

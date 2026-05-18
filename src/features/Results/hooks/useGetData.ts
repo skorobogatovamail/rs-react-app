@@ -10,8 +10,8 @@ export const useGetData = () => {
   const [pages, setPages] = useState(null);
   const [searchParams] = useSearchParams();
 
-  const searchValue = searchParams.get('name');
-  const page = searchParams.get('page');
+  const searchValue = searchParams.get('name') ?? '';
+  const page = searchParams.get('page') || '1';
 
   useEffect(() => {
     const loadItems = async () => {

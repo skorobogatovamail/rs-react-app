@@ -1,8 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import App from './App';
 import { MainPage } from './pages/MainPage/MainPage';
+import { renderAppWithOutlet } from './test-utils/renderWithRouter';
 
 vi.mock('./pages/MainPage/MainPage', () => ({
   MainPage: vi.fn(() => <div>Mock MainPage</div>),
@@ -15,7 +15,7 @@ describe('App Component', () => {
       vi.fn(() =>
         Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ results: [] }),
+          json: () => Promise.resolve({ results: [], info: { pages: 0 } }),
         })
       )
     );
@@ -23,7 +23,7 @@ describe('App Component', () => {
   });
 
   it('renders Layout and MainPage', () => {
-    render(<App />);
+    renderAppWithOutlet(<MainPage />);
     expect(screen.getByText('Search Engine App')).toBeInTheDocument();
     expect(screen.getByText('Mock MainPage')).toBeInTheDocument();
   });
@@ -32,14 +32,13 @@ describe('App Component', () => {
     const reloadSpy = vi.fn();
     vi.stubGlobal('location', { ...window.location, reload: reloadSpy });
 
-    // Suppress console.error
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     vi.mocked(MainPage).mockImplementation(() => {
       throw new Error('Test error');
     });
 
-    render(<App />);
+    renderAppWithOutlet(<MainPage />);
 
     const reloadButton = screen.getByRole('button', { name: /reload/i });
     fireEvent.click(reloadButton);
