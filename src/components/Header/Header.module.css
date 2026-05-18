@@ -1,0 +1,37 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.title {
+  font-size: 24px;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+}
+
+.navLink {
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navLink:hover {
+  background-color: var(--color-bg);
+}
+
+.navLinkActive {
+  color: var(--color-accent);
+  background-color: var(--color-bg);
+}
