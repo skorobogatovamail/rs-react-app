@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
-import { fetchData } from '../../../api/fetchData';
+import { fetchCharacters } from '../../../api/characters/fetchCharacters';
 import type { CardType } from '../../../components/Card/Card';
 
-export const useGetData = () => {
+export const useGetCharacters = () => {
   const [items, setItems] = useState<CardType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export const useGetData = () => {
       setError(null);
 
       try {
-        const { items: itemsResult, pages } = await fetchData(
+        const { items: itemsResult, pages } = await fetchCharacters(
           searchValue,
           page
         );

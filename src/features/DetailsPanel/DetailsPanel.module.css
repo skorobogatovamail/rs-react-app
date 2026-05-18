@@ -1,10 +1,17 @@
+.wrapper {
+  position: sticky;
+  top: 16px;
+  z-index: 1;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border: solid 2px lavender;
+  background-color: var(--color-border);
   border-radius: 10px;
-  padding: 16px;
+  padding: 18px;
+  position: relative;
 }
 
 .loaderContainer {

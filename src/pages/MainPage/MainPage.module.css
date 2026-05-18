@@ -13,3 +13,20 @@
   align-items: center;
   gap: 16px;
 }
+
+.resultsSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.resultsSectionWithDetails {
+  grid-template-columns: 2fr 1fr;
+  align-items: stretch;
+}
+
+.detailsAside {
+  width: 100%;
+  align-self: stretch;
+  min-height: 100%;
+}

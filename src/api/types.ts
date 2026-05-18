@@ -1,4 +1,4 @@
-type ServerItem = {
+export type ServerItem = {
   id: number;
   name: string;
   status: string;

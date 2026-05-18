@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import { Link } from 'react-router';
+import { useLocation } from 'react-router';
 
 import type { CardType } from '../Card/Card';
 import { Card } from '../Card/Card';
@@ -8,14 +9,23 @@ type CardsListProps = {
   items: CardType[];
 };
 
-export class CardsList extends Component<CardsListProps> {
-  render() {
-    return (
-      <div className={styles.list}>
-        {this.props.items.map((item) => (
-          <Card key={item.id} {...item} />
-        ))}
-      </div>
-    );
-  }
-}
+export const CardsList: React.FC<CardsListProps> = ({ items }) => {
+  const location = useLocation();
+  return (
+    <div className={styles.list}>
+      {items.map((item) => (
+        <Link
+          onClick={(e) => e.stopPropagation()}
+          key={item.id}
+          className={styles.container}
+          to={{
+            pathname: `/details/${item.id}`,
+            search: location.search,
+          }}
+        >
+          <Card {...item} />
+        </Link>
+      ))}
+    </div>
+  );
+};

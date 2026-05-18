@@ -1,7 +1,7 @@
-import { BASE_URL } from '../api/constants';
-import type { ServerResponse } from '../api/types';
+import { BASE_URL } from '../constants';
+import type { ServerResponse } from '../types';
 
-export const fetchData = async (name?: string, page: string = '1') => {
+export const fetchCharacters = async (name?: string, page: string = '1') => {
   const params = new URLSearchParams({ name: name || '', page }).toString();
   const response = await fetch(`${BASE_URL}?${params}`);
 
