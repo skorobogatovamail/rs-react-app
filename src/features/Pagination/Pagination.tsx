@@ -13,7 +13,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   totalPages,
 }) => {
-  const range = getPaginationRange(currentPage, totalPages);
+  const range =
+    totalPages != null ? getPaginationRange(currentPage, totalPages) : [];
 
   return (
     <nav aria-label="Pagination" className={styles.contaner}>
@@ -30,7 +31,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             key={el}
             onClick={() => onPageChange(el)}
             aria-current="page"
-            className={currentPage === el && styles.buttonCurrent}
+            className={currentPage === el ? styles.buttonCurrent : undefined}
           >
             {el}
           </Button>

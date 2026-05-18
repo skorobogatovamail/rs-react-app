@@ -1,6 +1,9 @@
-export const getPaginationRange = (currentPage: number, totalPages: number) => {
+export const getPaginationRange = (
+  currentPage: number,
+  totalPages: number
+): (number | '...')[] => {
   const siblings = 2;
-  const range = [];
+  const range: (number | '...')[] = [];
 
   if (totalPages <= siblings) {
     for (let i = 1; i < totalPages; i += 1) range.push(i);

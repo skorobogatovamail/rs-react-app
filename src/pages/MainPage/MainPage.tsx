@@ -33,7 +33,7 @@ export const MainPage: React.FC = () => {
         <Pagination
           currentPage={currentPage}
           onPageChange={onPageChange}
-          totalPages={pages}
+          totalPages={pages ?? undefined}
         />
       )}
     </div>

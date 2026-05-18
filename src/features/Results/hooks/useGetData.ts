@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { fetchData } from '../../../api/fetchData';
+import type { CardType } from '../../../components/Card/Card';
 
 export const useGetData = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<CardType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [pages, setPages] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [pages, setPages] = useState<number | null>(null);
   const [searchParams] = useSearchParams();
 
   const searchValue = searchParams.get('name') ?? '';
