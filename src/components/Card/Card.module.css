@@ -1,4 +1,5 @@
 .container {
+  position: relative;
   background-color: var(--color-surface);
   padding: 16px;
   border-radius: 10px;
@@ -11,8 +12,30 @@
   justify-content: center;
   cursor: pointer;
   max-width: 350px;
+  width: 100%;
+  border: 2px solid transparent;
 }
+
 .container:hover {
   transform: translateY(-5px);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+.selected {
+  border-color: var(--color-accent);
+}
+
+.checkboxLabel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
 }
