@@ -1,0 +1,12 @@
+.contaner {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+}
+
+.buttonCurrent {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  outline: none;
+}
