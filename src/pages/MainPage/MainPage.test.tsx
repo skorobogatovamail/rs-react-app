@@ -1,8 +1,13 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { Provider } from 'react-redux';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BASE_URL } from '../../api/constants';
+import { Layout } from '../../components/Layout/Layout';
+import { ThemeProvider } from '../../context/ThemeContext';
+import { type AppStore, setupStore } from '../../store/store';
+import { AboutPage } from '../AboutPage/AboutPage';
 import { MainPage } from './MainPage';
 
 const mockApiResponse = {
@@ -23,17 +28,41 @@ const mockApiResponse = {
   },
 };
 
+let store: AppStore;
+
 const renderMainPage = (initialEntries: string[] = ['/']) =>
   render(
-    <MemoryRouter initialEntries={initialEntries}>
-      <MainPage />
-    </MemoryRouter>
+    <Provider store={store}>
+      <ThemeProvider>
+        <MemoryRouter initialEntries={initialEntries}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <MainPage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <Layout>
+                  <AboutPage />
+                </Layout>
+              }
+            />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
+    </Provider>
   );
 
 describe('MainPage Component', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
     localStorage.clear();
+    store = setupStore();
   });
 
   it('makes initial API call on component mount', async () => {
@@ -176,5 +205,28 @@ describe('MainPage Component', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
     });
+  });
+
+  it('keeps selected items when navigating to another page', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => mockApiResponse,
+    } as Response);
+
+    renderMainPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      screen.getByRole('checkbox', { name: 'Select Rick Sanchez' })
+    );
+    expect(store.getState().selectedItems.selectedItems[1]).toBeDefined();
+
+    fireEvent.click(screen.getByRole('link', { name: 'About' }));
+
+    expect(screen.getByText('1 item selected')).toBeInTheDocument();
+    expect(store.getState().selectedItems.selectedItems[1]).toBeDefined();
   });
 });
