@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { BASE_URL } from '../../api/constants';
 import { Layout } from '../../components/Layout/Layout';
 import { ThemeProvider } from '../../context/ThemeContext';
+import { BASE_URL } from '../../services/constants';
 import { type AppStore, setupStore } from '../../store/store';
 import { AboutPage } from '../AboutPage/AboutPage';
 import { MainPage } from './MainPage';

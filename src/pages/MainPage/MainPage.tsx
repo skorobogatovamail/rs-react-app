@@ -5,16 +5,17 @@ import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { useCloseDetails } from '../../features/DetailsPanel/hooks/useCloseDetails';
 import { usePagination } from '../../features/Pagination/hooks/usePagination';
 import { Pagination } from '../../features/Pagination/Pagination';
-import { useGetCharacters } from '../../features/Results/hooks/useGetCharacters';
 import { Results } from '../../features/Results/Results';
 import { useSearch } from '../../features/Search/hooks/useSearch';
 import { Search } from '../../features/Search/Search';
+import { useGetCharacters } from './hooks/useGetCharacters';
 import styles from './MainPage.module.css';
 
 export const MainPage: React.FC = () => {
   const { searchValue, handleSearchChange, handleSubmit } = useSearch();
   const { currentPage, onPageChange } = usePagination();
   const { items, isLoading, error, pages } = useGetCharacters();
+
   const handleCloseDetails = useCloseDetails();
   const detailsMatch = useMatch('/details/:id');
 
@@ -57,7 +58,7 @@ export const MainPage: React.FC = () => {
         <Pagination
           currentPage={currentPage}
           onPageChange={onPageChange}
-          totalPages={pages ?? undefined}
+          totalPages={pages}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-export type ServerItem = {
+export type Character = {
   id: number;
   name: string;
   status: string;
@@ -7,8 +7,8 @@ export type ServerItem = {
   url: string;
 };
 
-export type ServerResponse = {
-  results: ServerItem[];
+export type CharactersServerResponse = {
+  results: Character[];
   info: {
     count: number;
     pages: number;
