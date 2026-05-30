@@ -4,6 +4,8 @@ import type { CardType } from '../components/Card/Card';
 import { BASE_URL } from './constants';
 import type { Character, CharactersServerResponse } from './types';
 
+const cacheTTL = import.meta.env.VITE_CACHE_TTL_SECONDS;
+
 export type GetCharactersArgs = {
   name: string;
   page: string;
@@ -26,6 +28,8 @@ const mapCharacterToCard = (el: Character): CardType => ({
 
 export const rickAndMortyApi = createApi({
   reducerPath: 'rickAndMortyApi',
+  keepUnusedDataFor: cacheTTL || 60,
+  tagTypes: ['Character', 'Characters'],
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
     getCharacters: builder.query<GetCharactersResult, GetCharactersArgs>({
@@ -40,11 +44,13 @@ export const rickAndMortyApi = createApi({
         items: response.results.map(mapCharacterToCard),
         pages: response.info.pages,
       }),
+      providesTags: [{ type: 'Characters', id: 'LIST' }],
     }),
 
     getCharacterDetails: builder.query<CardType, GetCharactersDetailsArg>({
       query: (id) => id,
       transformResponse: (response: Character) => mapCharacterToCard(response),
+      providesTags: [{ type: 'Character' }],
     }),
   }),
 });
