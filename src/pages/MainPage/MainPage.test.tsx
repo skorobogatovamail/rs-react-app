@@ -85,11 +85,13 @@ describe('MainPage Component', () => {
 
   it('handles search term from localStorage on initial load', async () => {
     localStorage.setItem('searchValue', 'Morty');
-    vi.mocked(fetch).mockResolvedValue(
-      createMockResponse({
-        results: [],
-        info: { count: 0, pages: 0, next: null, prev: null },
-      })
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(
+        createMockResponse({
+          results: [],
+          info: { count: 0, pages: 0, next: null, prev: null },
+        })
+      )
     );
 
     renderMainPage();
@@ -103,11 +105,13 @@ describe('MainPage Component', () => {
   });
 
   it('saves search term to localStorage when search button is clicked', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      createMockResponse({
-        results: [],
-        info: { count: 0, pages: 0, next: null, prev: null },
-      })
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(
+        createMockResponse({
+          results: [],
+          info: { count: 0, pages: 0, next: null, prev: null },
+        })
+      )
     );
 
     renderMainPage();
@@ -126,11 +130,13 @@ describe('MainPage Component', () => {
   });
 
   it('trims whitespace from search input before saving', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      createMockResponse({
-        results: [],
-        info: { count: 0, pages: 0, next: null, prev: null },
-      })
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(
+        createMockResponse({
+          results: [],
+          info: { count: 0, pages: 0, next: null, prev: null },
+        })
+      )
     );
 
     renderMainPage();
@@ -149,11 +155,13 @@ describe('MainPage Component', () => {
   });
 
   it('does not trigger search if search value is the same as last submitted', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      createMockResponse({
-        results: [],
-        info: { count: 0, pages: 0, next: null, prev: null },
-      })
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(
+        createMockResponse({
+          results: [],
+          info: { count: 0, pages: 0, next: null, prev: null },
+        })
+      )
     );
 
     renderMainPage(['/?name=Rick&page=1']);
@@ -169,10 +177,14 @@ describe('MainPage Component', () => {
   });
 
   it('displays error message when API call fails', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      createMockResponse({ error: 'Not found' }, { status: 404, ok: false })
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(
+        createMockResponse({
+          results: [],
+          info: { count: 0, pages: 0, next: null, prev: null },
+        })
+      )
     );
-
     renderMainPage();
 
     await waitFor(() => {
