@@ -5,10 +5,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Layout } from '../../components/Layout/Layout';
 import { ThemeProvider } from '../../context/ThemeContext';
-import { BASE_URL } from '../../services/constants';
 import { type AppStore, setupStore } from '../../store/store';
+import { createMockResponse } from '../../test-utils/createMockResponse';
 import { AboutPage } from '../AboutPage/AboutPage';
 import { MainPage } from './MainPage';
+
+const getFetchUrl = (index = 0) =>
+  (vi.mocked(fetch).mock.calls[index][0] as Request).url;
 
 const mockApiResponse = {
   results: [
@@ -63,17 +66,18 @@ describe('MainPage Component', () => {
     vi.stubGlobal('fetch', vi.fn());
     localStorage.clear();
     store = setupStore();
+
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(createMockResponse(mockApiResponse))
+    );
   });
 
   it('makes initial API call on component mount', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      json: async () => mockApiResponse,
-    } as Response);
-
     renderMainPage();
 
-    expect(fetch).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+    });
     await waitFor(() => {
       expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     });
@@ -81,31 +85,30 @@ describe('MainPage Component', () => {
 
   it('handles search term from localStorage on initial load', async () => {
     localStorage.setItem('searchValue', 'Morty');
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    vi.mocked(fetch).mockResolvedValue(
+      createMockResponse({
         results: [],
         info: { count: 0, pages: 0, next: null, prev: null },
-      }),
-    } as Response);
+      })
+    );
 
     renderMainPage();
 
     const input = screen.getByPlaceholderText('Search') as HTMLInputElement;
     expect(input.value).toBe('Morty');
-    expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining(`${BASE_URL}?name=&page=1`)
-    );
+
+    await waitFor(() => {
+      expect(getFetchUrl()).toContain('name=&page=1');
+    });
   });
 
   it('saves search term to localStorage when search button is clicked', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    vi.mocked(fetch).mockResolvedValue(
+      createMockResponse({
         results: [],
         info: { count: 0, pages: 0, next: null, prev: null },
-      }),
-    } as Response);
+      })
+    );
 
     renderMainPage();
 
@@ -118,20 +121,17 @@ describe('MainPage Component', () => {
     expect(localStorage.getItem('searchValue')).toBe('Summer');
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
-        expect.stringContaining('name=Summer')
-      );
+      expect(getFetchUrl(1)).toContain('name=Summer');
     });
   });
 
   it('trims whitespace from search input before saving', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    vi.mocked(fetch).mockResolvedValue(
+      createMockResponse({
         results: [],
         info: { count: 0, pages: 0, next: null, prev: null },
-      }),
-    } as Response);
+      })
+    );
 
     renderMainPage();
 
@@ -144,18 +144,17 @@ describe('MainPage Component', () => {
     expect(localStorage.getItem('searchValue')).toBe('Beth');
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('name=Beth'));
+      expect(getFetchUrl(1)).toContain('name=Beth');
     });
   });
 
   it('does not trigger search if search value is the same as last submitted', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    vi.mocked(fetch).mockResolvedValue(
+      createMockResponse({
         results: [],
         info: { count: 0, pages: 0, next: null, prev: null },
-      }),
-    } as Response);
+      })
+    );
 
     renderMainPage(['/?name=Rick&page=1']);
 
@@ -170,9 +169,9 @@ describe('MainPage Component', () => {
   });
 
   it('displays error message when API call fails', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: false,
-    } as Response);
+    vi.mocked(fetch).mockResolvedValue(
+      createMockResponse({ error: 'Not found' }, { status: 404, ok: false })
+    );
 
     renderMainPage();
 
@@ -194,13 +193,12 @@ describe('MainPage Component', () => {
 
     expect(screen.getByTestId('loader')).toBeInTheDocument();
 
-    resolveFetch!({
-      ok: true,
-      json: async () => ({
+    resolveFetch!(
+      createMockResponse({
         results: [],
         info: { count: 0, pages: 0, next: null, prev: null },
-      }),
-    } as Response);
+      })
+    );
 
     await waitFor(() => {
       expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
@@ -208,11 +206,6 @@ describe('MainPage Component', () => {
   });
 
   it('keeps selected items when navigating to another page', async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      ok: true,
-      json: async () => mockApiResponse,
-    } as Response);
-
     renderMainPage();
 
     await waitFor(() => {
