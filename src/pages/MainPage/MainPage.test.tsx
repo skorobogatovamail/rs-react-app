@@ -179,10 +179,7 @@ describe('MainPage Component', () => {
   it('displays error message when API call fails', async () => {
     vi.mocked(fetch).mockImplementation(() =>
       Promise.resolve(
-        createMockResponse({
-          results: [],
-          info: { count: 0, pages: 0, next: null, prev: null },
-        })
+        createMockResponse({ error: 'Not found' }, { status: 404, ok: false })
       )
     );
     renderMainPage();
