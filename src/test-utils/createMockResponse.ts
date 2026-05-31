@@ -4,7 +4,7 @@ type MockResponseOptions = {
 };
 
 export const createMockResponse = (
-  data,
+  data: unknown,
   { status = 200, ok = status >= 200 && status < 300 }: MockResponseOptions = {}
 ) => {
   return new Response(JSON.stringify(data), {

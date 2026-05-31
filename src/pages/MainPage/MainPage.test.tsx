@@ -231,4 +231,58 @@ describe('MainPage Component', () => {
     expect(screen.getByText('1 item selected')).toBeInTheDocument();
     expect(store.getState().selectedItems.selectedItems[1]).toBeDefined();
   });
+
+  it('caches request between pages', async () => {
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve(
+        createMockResponse({
+          ...mockApiResponse,
+          info: { ...mockApiResponse.info, pages: 3 },
+        })
+      )
+    );
+
+    renderMainPage(['/?page=1']);
+
+    await waitFor(() => {
+      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+    });
+
+    const countAfterPage1 = vi.mocked(fetch).mock.calls.length;
+
+    fireEvent.click(screen.getByRole('button', { name: '2' }));
+
+    await waitFor(() => {
+      expect(vi.mocked(fetch).mock.calls.length).toBeGreaterThan(
+        countAfterPage1
+      );
+    });
+
+    const countAfterPage2 = vi.mocked(fetch).mock.calls.length;
+
+    fireEvent.click(screen.getByRole('button', { name: '1' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+    });
+
+    expect(vi.mocked(fetch).mock.calls.length).toBe(countAfterPage2);
+  });
+
+  it('refresh invalidates cache', async () => {
+    renderMainPage(['/?page=1']);
+
+    await waitFor(() => {
+      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+    });
+
+    const before = vi.mocked(fetch).mock.calls.length;
+
+    const [refreshButton] = screen.getAllByRole('button', { name: /refresh/i });
+    fireEvent.click(refreshButton);
+
+    await waitFor(() => {
+      expect(vi.mocked(fetch).mock.calls.length).toBeGreaterThan(before);
+    });
+  });
 });
