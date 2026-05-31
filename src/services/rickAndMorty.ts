@@ -28,7 +28,7 @@ const mapCharacterToCard = (el: Character): CardType => ({
 
 export const rickAndMortyApi = createApi({
   reducerPath: 'rickAndMortyApi',
-  keepUnusedDataFor: cacheTTL || 60,
+  keepUnusedDataFor: Number(cacheTTL) || 60,
   tagTypes: ['Character', 'Characters'],
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
@@ -50,7 +50,7 @@ export const rickAndMortyApi = createApi({
     getCharacterDetails: builder.query<CardType, GetCharactersDetailsArg>({
       query: (id) => id,
       transformResponse: (response: Character) => mapCharacterToCard(response),
-      providesTags: [{ type: 'Character' }],
+      providesTags: (_r, _e, id) => [{ type: 'Character', id }],
     }),
   }),
 });

@@ -22,10 +22,7 @@ export const MainPage: React.FC = () => {
 
   function handleRefresh() {
     dispatch(
-      rickAndMortyApi.util.invalidateTags([
-        { type: 'Characters', id: 'LIST' },
-        { type: 'Character' },
-      ])
+      rickAndMortyApi.util.invalidateTags([{ type: 'Characters', id: 'LIST' }])
     );
   }
 
@@ -44,7 +41,9 @@ export const MainPage: React.FC = () => {
           onChange={handleSearchChange}
           onSubmit={handleSubmit}
         />
-        <Button onClick={handleRefresh}>Refresh</Button>
+        <div>
+          <Button onClick={handleRefresh}>Refresh</Button>
+        </div>
       </section>
       <section
         className={cn(
