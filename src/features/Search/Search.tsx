@@ -1,5 +1,7 @@
 import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
+import { rickAndMortyApi } from '../../services/rickAndMorty';
+import { useAppDispatch } from '../../store/hooks';
 import styles from './Search.module.css';
 
 type SearchProps = {
@@ -13,16 +15,29 @@ export const Search: React.FC<SearchProps> = ({
   onChange,
   onSubmit,
 }) => {
+  const dispatch = useAppDispatch();
+
+  function handleRefresh() {
+    dispatch(
+      rickAndMortyApi.util.invalidateTags([{ type: 'Characters', id: 'LIST' }])
+    );
+  }
   return (
-    <form
-      className={styles.container}
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
-    >
-      <Input value={value} onChange={onChange} placeholder="Search" />
-      <Button type="submit">Search</Button>
-    </form>
+    <>
+      <form
+        className={styles.container}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
+        <Input value={value} onChange={onChange} placeholder="Search" />
+        <Button type="submit">Search</Button>
+      </form>
+
+      <div>
+        <Button onClick={handleRefresh}>Refresh</Button>
+      </div>
+    </>
   );
 };
