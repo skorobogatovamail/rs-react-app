@@ -32,12 +32,13 @@ export const Search: React.FC<SearchProps> = ({
         }}
       >
         <Input value={value} onChange={onChange} placeholder="Search" />
-        <Button type="submit">Search</Button>
+        <Button className={styles.searchButton} type="submit">
+          Search
+        </Button>
+        <Button className={styles.refreshButton} onClick={handleRefresh}>
+          Refresh
+        </Button>
       </form>
-
-      <div>
-        <Button onClick={handleRefresh}>Refresh</Button>
-      </div>
     </>
   );
 };

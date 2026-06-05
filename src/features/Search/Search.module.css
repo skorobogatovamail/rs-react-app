@@ -1,4 +1,22 @@
 .container {
-    display: flex;
-    gap: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.searchButton {
+  background-color: var(--color-accent);
+
+  &:hover,
+  &:active {
+    transform: translateY(2px) scale(0.98);
+  }
+}
+
+.refreshButton {
+  background-color: var(--color-muted);
+
+  &:hover,
+  &:active {
+    transform: translateY(2px) scale(0.98);
+  }
 }
