@@ -2,13 +2,16 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
+import { TestProviders } from '../../test-utils/TestProviders';
 import { Results } from './Results';
 
 const renderResults = (props: React.ComponentProps<typeof Results>) =>
   render(
-    <MemoryRouter>
-      <Results {...props} />
-    </MemoryRouter>
+    <TestProviders>
+      <MemoryRouter>
+        <Results {...props} />
+      </MemoryRouter>
+    </TestProviders>
   );
 
 const mockItems = [
