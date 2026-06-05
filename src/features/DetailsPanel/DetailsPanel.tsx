@@ -4,6 +4,8 @@ import { useParams } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Card } from '../../components/Card/Card';
 import { Loader } from '../../components/Loader/Loader';
+import { rickAndMortyApi } from '../../services/rickAndMorty';
+import { useAppDispatch } from '../../store/hooks';
 import styles from './DetailsPanel.module.css';
 import { useCloseDetails } from './hooks/useCloseDetails';
 import { useGetDetails } from './hooks/useGetDetails';
@@ -14,6 +16,11 @@ export const DetailsPanel = () => {
   const handleCloseDetails = useCloseDetails();
 
   const { item, isLoading, error } = useGetDetails(id ?? '');
+  const dispatch = useAppDispatch();
+
+  function handleRefresh() {
+    dispatch(rickAndMortyApi.util.invalidateTags([{ type: 'Character', id }]));
+  }
 
   if (isLoading) {
     return (
@@ -62,6 +69,7 @@ export const DetailsPanel = () => {
         <Button aria-label="Close details" onClick={handleCloseDetails}>
           Close
         </Button>
+        <Button onClick={handleRefresh}>Refresh</Button>
       </div>
     </div>
   );

@@ -1,34 +1,19 @@
-import { useEffect, useState } from 'react';
-
-import { fetchCharacterDetails } from '../../../api/details/fetchCharacterDetails';
-import type { CardType } from '../../../components/Card/Card';
+import { useGetCharacterDetailsQuery } from '../../../services/rickAndMorty';
+import { getErrorMessage } from '../../../services/utils/getErrorMessage';
 
 export const useGetDetails = (id: string) => {
-  const [item, setItem] = useState<CardType | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: item,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetCharacterDetailsQuery(id, { skip: !id });
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
+  const errorMessage = getErrorMessage(error, 'Failed to fetch character');
 
-    const getItemData = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const itemData: CardType = await fetchCharacterDetails(id);
-        setItem(itemData);
-      } catch {
-        setError('Failed to fetch character');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getItemData();
-  }, [id]);
-
-  return { item, isLoading, error };
+  return {
+    item: item ?? null,
+    isLoading: isLoading || isFetching,
+    error: errorMessage,
+  };
 };
