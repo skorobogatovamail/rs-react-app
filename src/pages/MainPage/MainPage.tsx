@@ -1,7 +1,6 @@
 import cn from 'classnames';
 import { Outlet, useMatch } from 'react-router';
 
-import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { useCloseDetails } from '../../features/DetailsPanel/hooks/useCloseDetails';
 import { usePagination } from '../../features/Pagination/hooks/usePagination';
 import { Pagination } from '../../features/Pagination/Pagination';
@@ -21,10 +20,6 @@ export const MainPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.errorButtonContainer}>
-        <ErrorButton />
-      </div>
-
       <section className={styles.searchSection}>
         <Search
           value={searchValue}

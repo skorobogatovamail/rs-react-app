@@ -11,12 +11,6 @@
   gap: 12px;
 }
 
-.errorButtonContainer {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .resultsSection {
   display: grid;
   grid-template-columns: 1fr;

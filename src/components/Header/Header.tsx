@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router';
 
 import { useTheme } from '../../context/useTheme';
+import { ModalContainer } from '../../features/ModalContainer/ModalContainer';
+import { ErrorButton } from '../ErrorButton/ErrorButton';
 import styles from './Header.module.css';
 
 type HeaderProps = {
@@ -57,6 +59,10 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             About
           </NavLink>
         </nav>
+
+        <ModalContainer />
+
+        <ErrorButton />
       </div>
     </header>
   );
