@@ -1,10 +1,10 @@
 import { Button } from '../../components/Button/Button';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { clearAll } from '../../store/selectedItemsSlice';
 import {
   selectSelectedCount,
   selectSelectedItemsList,
-} from '../../store/selectors';
+} from '../../store/selectors/selectedItemsSelectors';
+import { clearAll } from '../../store/slices/selectedItemsSlice';
 import { downloadSelectedItemsAsCsv } from '../../utils/downloadCsv';
 import styles from './SelectedItemsFlyout.module.css';
 

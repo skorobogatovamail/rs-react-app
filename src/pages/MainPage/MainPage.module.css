@@ -4,13 +4,6 @@
   gap: 32px;
 }
 
-.searchSection {
-  padding: 32px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
 .resultsSection {
   display: grid;
   grid-template-columns: 1fr;

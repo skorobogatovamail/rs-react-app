@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { rickAndMortyApi } from '../services/rickAndMorty';
-import { selectedItemsSlice } from './selectedItemsSlice';
+import { formSubmissionsSlice } from './slices/formSubmissionsSlice';
+import { selectedItemsSlice } from './slices/selectedItemsSlice';
 
 export const store = configureStore({
   reducer: {
     selectedItems: selectedItemsSlice.reducer,
     [rickAndMortyApi.reducerPath]: rickAndMortyApi.reducer,
+    formSubmissions: formSubmissionsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(rickAndMortyApi.middleware),
@@ -23,6 +25,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) =>
     reducer: {
       selectedItems: selectedItemsSlice.reducer,
       [rickAndMortyApi.reducerPath]: rickAndMortyApi.reducer,
+      formSubmissions: formSubmissionsSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(rickAndMortyApi.middleware),

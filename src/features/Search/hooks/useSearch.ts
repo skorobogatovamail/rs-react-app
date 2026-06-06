@@ -5,12 +5,16 @@ import {
   SEARCH_VALUE_KEY,
   useLocalStorage,
 } from '../../../hooks/useLocalStorage';
+import { rickAndMortyApi } from '../../../services/rickAndMorty';
+import { useAppDispatch } from '../../../store/hooks';
 
 export const useSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { read, write, remove } = useLocalStorage(SEARCH_VALUE_KEY);
   const savedSearchValue = searchParams.get('name') || read() || '';
   const [searchValue, setSearchValue] = useState(savedSearchValue);
+
+  const dispatch = useAppDispatch();
 
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
@@ -32,5 +36,11 @@ export const useSearch = () => {
     setSearchParams(newSearchParams);
   };
 
-  return { searchValue, handleSearchChange, handleSubmit };
+  function handleRefresh() {
+    dispatch(
+      rickAndMortyApi.util.invalidateTags([{ type: 'Characters', id: 'LIST' }])
+    );
+  }
+
+  return { searchValue, handleSearchChange, handleSubmit, handleRefresh };
 };
