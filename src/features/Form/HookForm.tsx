@@ -109,7 +109,7 @@ export const HookForm = ({ onSave }: IFormProps) => {
       <FormField
         id="rhf-image"
         label="Image"
-        error={errors.image?.message || fileError}
+        error={errors.image?.message || fileError || undefined}
       >
         <Controller
           name="image"

@@ -16,8 +16,8 @@ export const useSearch = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value);
+  const handleSearchChange = (value: string | number) => {
+    setSearchValue(String(value));
   };
 
   const handleSubmit = () => {

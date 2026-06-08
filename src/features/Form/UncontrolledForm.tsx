@@ -161,7 +161,7 @@ export const UncontrolledForm = ({ onSave }: IFormProps) => {
       <FormField
         id="uncontrolled-confirm-password"
         label="Confirm Password"
-        error={confirmPasswordError}
+        error={confirmPasswordError || undefined}
       >
         <input
           id="uncontrolled-confirm-password"

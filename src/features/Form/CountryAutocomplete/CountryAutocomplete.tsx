@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useAppSelector } from '../../../store/hooks';
 import { selectCountries } from '../../../store/selectors/countriesSelectors';
+import { type Country } from '../../../store/slices/countriesSlice';
 
 type CountryAutocompleteProps = React.InputHTMLAttributes<HTMLInputElement> & {
   id: string;
@@ -16,11 +17,11 @@ export const CountryAutocomplete: React.FC<CountryAutocompleteProps> = ({
   ...props
 }) => {
   const [query, setQuery] = useState(value || '');
-  const [filteredCountries, setFilteredCountries] = useState([]);
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
 
   const countries = useAppSelector(selectCountries);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
     console.log(value);

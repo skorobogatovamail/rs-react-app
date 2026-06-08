@@ -1,10 +1,11 @@
 import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
+
 import styles from './Search.module.css';
 
 type SearchProps = {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | number) => void;
   onSubmit: () => void;
   onRefresh: () => void;
 };
