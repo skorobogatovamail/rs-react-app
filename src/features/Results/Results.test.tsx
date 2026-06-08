@@ -34,7 +34,7 @@ const mockItems = [
 describe('Results Component', () => {
   it('renders correct number of items when data is provided', () => {
     renderResults({ items: mockItems, isLoading: false, error: null });
-    expect(screen.getByText('Results')).toBeInTheDocument();
+    expect(screen.getByText('Search Results')).toBeInTheDocument();
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2);

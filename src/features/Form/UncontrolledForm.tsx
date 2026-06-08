@@ -13,7 +13,7 @@ import { PasswordStrength } from './PasswordStrength/PasswordStrength';
 import { schema } from './schema';
 import { getFormStringValue } from './utils/getFormStringValue';
 
-import styles from '../Form.module.css';
+import styles from './Form.module.css';
 
 interface IFormProps {
   onSave?: () => void;

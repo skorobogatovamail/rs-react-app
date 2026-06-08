@@ -13,7 +13,7 @@ import { useFormSubmission } from './hooks/useFormSubmission';
 import { PasswordStrength } from './PasswordStrength/PasswordStrength';
 import { schema } from './schema';
 
-import styles from '../Form.module.css';
+import styles from './Form.module.css';
 
 interface IFormProps {
   onSave?: () => void;

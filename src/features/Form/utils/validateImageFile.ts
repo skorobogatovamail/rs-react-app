@@ -9,5 +9,5 @@ export const validateImageFile = (file: File) => {
   if (file.size > MAX_SIZE) {
     return 'File size must be less than 5 MB';
   }
-  return;
+  return null;
 };
