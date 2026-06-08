@@ -11,6 +11,7 @@ import { Search } from '../../features/Search/Search';
 import { useAppSelector } from '../../store/hooks';
 import { selectFormSubmissions } from '../../store/selectors/formSubmissionSelectors';
 import { useGetCharacters } from './hooks/useGetCharacters';
+
 import styles from './MainPage.module.css';
 
 export const MainPage: React.FC = () => {
@@ -26,7 +27,9 @@ export const MainPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <FormSubmissionResults results={formSubmissions} />
+      {formSubmissions.length !== 0 && (
+        <FormSubmissionResults results={formSubmissions} />
+      )}
       <Search
         value={searchValue}
         onChange={handleSearchChange}

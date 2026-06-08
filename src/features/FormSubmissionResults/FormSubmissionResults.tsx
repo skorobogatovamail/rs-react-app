@@ -1,5 +1,6 @@
 import { type FormSubmission } from '../../store/slices/formSubmissionsSlice';
 import { FormSubmissionResult } from './FormSubmissionResult/FormSubmissionResult';
+
 import styles from './FormSubmissionResults.module.css';
 
 interface IFormSubmissionResultsProps {
@@ -10,7 +11,7 @@ export const FormSubmissionResults: React.FC<IFormSubmissionResultsProps> = ({
 }) => {
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Form submission results</h2>
+      <h2 className={styles.title}>HookForm submission results</h2>
       {results.map((el, i) => (
         <FormSubmissionResult {...el} key={i} />
       ))}

@@ -3,6 +3,9 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 export interface FormSubmission {
   name: string;
   age: string;
+  email: string;
+  gender: string;
+  acceptTerms: boolean;
 }
 
 interface FormSubmissionsSliceState {
