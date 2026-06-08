@@ -12,8 +12,8 @@ export const FormSubmissionResults: React.FC<IFormSubmissionResultsProps> = ({
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>HookForm submission results</h2>
-      {results.map((el, i) => (
-        <FormSubmissionResult {...el} key={i} />
+      {results.map((el) => (
+        <FormSubmissionResult {...el} key={el.id} />
       ))}
     </div>
   );

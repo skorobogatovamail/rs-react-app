@@ -8,6 +8,14 @@
   padding: 12px 16px;
   justify-content: space-between;
   align-items: center;
+  transition:
+    background-color 0.5s ease,
+    border-color 0.5s ease;
+}
+
+.highlighted {
+  background-color: rgba(0, 255, 0, 0.1);
+  border-color: #4caf50;
 }
 
 .textContent {

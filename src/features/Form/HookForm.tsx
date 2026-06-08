@@ -1,36 +1,27 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { Controller, type Resolver, useForm } from 'react-hook-form';
 
 import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
 import { type FormSubmission } from '../../store/slices/formSubmissionsSlice';
+import { CountryAutocomplete } from './CountryAutocomplete/CountryAutocomplete';
 import { FormField } from './FormField/FormField';
 import { GenderSelect } from './GenderSelect/GenderSelect';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useFormSubmission } from './hooks/useFormSubmission';
+import { PasswordStrength } from './PasswordStrength/PasswordStrength';
+import { schema } from './schema';
 
-import styles from './Form.module.css';
+import styles from '../Form.module.css';
 
 interface IFormProps {
   onSave?: () => void;
 }
 
-const schema = yup
-  .object({
-    name: yup.string().required(),
-    age: yup.string().required(),
-    email: yup.string().required(),
-    gender: yup.string().required(),
-    acceptTerms: yup
-      .boolean()
-      .oneOf([true], 'You must accept Terms and Conditions')
-      .required(),
-    image: yup.string().required('Image is required'),
-    // country: yup.string().required('Country is required'),
-  })
-  .required();
+interface FormValues extends Omit<FormSubmission, 'id' | 'timestamp'> {
+  confirmPassword: string;
+}
 
 export const HookForm = ({ onSave }: IFormProps) => {
   const {
@@ -38,9 +29,10 @@ export const HookForm = ({ onSave }: IFormProps) => {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
+    watch,
+    formState: { errors, isValid },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema) as Resolver<FormValues>,
     defaultValues: {
       name: '',
       age: '',
@@ -48,19 +40,25 @@ export const HookForm = ({ onSave }: IFormProps) => {
       gender: '',
       acceptTerms: false,
       image: '',
-      // country: '',
+      country: '',
+      password: '',
+      confirmPassword: '',
     },
+    mode: 'onChange',
   });
 
   const { submit } = useFormSubmission(onSave);
 
-  const onSubmit = (data: FormSubmission) => {
-    submit(data);
+  const onSubmit = (data: FormValues) => {
+    const { confirmPassword: _, ...submissionData } = data;
+    submit(submissionData);
     reset();
   };
 
   const { processFile, fileError } = useFileUpload();
   const [imagePreview, setImagePreview] = useState('');
+
+  const passwordValue = watch('password', '');
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -72,7 +70,6 @@ export const HookForm = ({ onSave }: IFormProps) => {
           render={({ field }) => <Input {...field} id="rhf-name" />}
         />
       </FormField>
-
       <FormField id="rhf-age" label="Age" error={errors.age?.message}>
         <Controller
           name="age"
@@ -80,11 +77,9 @@ export const HookForm = ({ onSave }: IFormProps) => {
           render={({ field }) => <Input {...field} id="rhf-age" />}
         />
       </FormField>
-
       <FormField id="rhf-gender" label="Gender" error={errors.gender?.message}>
         <GenderSelect id="rhf-gender" {...register('gender')} />
       </FormField>
-
       <FormField id="rhf-email" label="Email" error={errors.email?.message}>
         <Controller
           name="email"
@@ -92,7 +87,6 @@ export const HookForm = ({ onSave }: IFormProps) => {
           render={({ field }) => <Input {...field} id="rhf-email" />}
         />
       </FormField>
-
       <FormField
         id="rhf-acceptTerms"
         label="Accept Terms and Conditions"
@@ -112,7 +106,6 @@ export const HookForm = ({ onSave }: IFormProps) => {
           )}
         />
       </FormField>
-
       <FormField
         id="rhf-image"
         label="Image"
@@ -145,7 +138,50 @@ export const HookForm = ({ onSave }: IFormProps) => {
         )}
       </FormField>
 
-      <Button type="submit">Save</Button>
+      <FormField
+        id="rhf-country"
+        label="Country"
+        error={errors.country?.message}
+      >
+        <Controller
+          name="country"
+          control={control}
+          rules={{ required: 'Please select a country' }}
+          render={({ field }) => (
+            <CountryAutocomplete id="rhf-country" {...field} />
+          )}
+        />
+      </FormField>
+
+      <FormField
+        id="rhf-password"
+        label="Password"
+        error={errors.password?.message}
+      >
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => <Input {...field} id="rhf-password" />}
+        />
+      </FormField>
+
+      <PasswordStrength password={passwordValue} />
+
+      <FormField
+        id="h-confirm"
+        label="Confirm Password"
+        error={errors.confirmPassword?.message}
+      >
+        <input
+          id="h-confirm"
+          type="password"
+          {...register('confirmPassword')}
+        />
+      </FormField>
+
+      <Button type="submit" disabled={!isValid}>
+        Save
+      </Button>
     </form>
   );
 };

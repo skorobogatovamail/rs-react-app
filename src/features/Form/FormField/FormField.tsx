@@ -13,12 +13,12 @@ export const FormField: React.FC<React.PropsWithChildren<FormFieldProps>> = ({
   children,
 }) => {
   return (
-    <>
+    <div className={styles.fieldContainer}>
       <div className={styles.field}>
         <label htmlFor={id}>{label}</label>
         {children}
       </div>
       {error && <p className={styles.error}>{error}</p>}
-    </>
+    </div>
   );
 };

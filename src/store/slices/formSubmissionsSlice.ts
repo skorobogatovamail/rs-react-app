@@ -1,13 +1,16 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface FormSubmission {
+  id: string;
+  timestamp: number;
   name: string;
   age: string;
   email: string;
   gender: string;
   acceptTerms: boolean;
   image: string;
-  // country: string;
+  country: string;
+  password: string;
 }
 
 interface FormSubmissionsSliceState {
@@ -22,8 +25,16 @@ export const formSubmissionsSlice = createSlice({
   name: 'formSubmissions',
   initialState,
   reducers: {
-    addSubmission: (state, action: PayloadAction<FormSubmission>) => {
-      state.formSubmissions = [...state.formSubmissions, action.payload];
+    addSubmission: (
+      state,
+      action: PayloadAction<Omit<FormSubmission, 'id' | 'timestamp'>>
+    ) => {
+      const newSubmission: FormSubmission = {
+        ...action.payload,
+        id: crypto.randomUUID(),
+        timestamp: Date.now(),
+      };
+      state.formSubmissions = [...state.formSubmissions, newSubmission];
     },
   },
 });

@@ -7,7 +7,7 @@ import {
 export const useFormSubmission = (onSave?: () => void) => {
   const dispatch = useAppDispatch();
 
-  const submit = (data: FormSubmission) => {
+  const submit = (data: Omit<FormSubmission, 'id' | 'timestamp'>) => {
     dispatch(addSubmission(data));
     onSave?.();
   };

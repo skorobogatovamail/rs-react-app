@@ -1,7 +1,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   width: 100%;
   background-color: var(--color-surface);
   padding: 20px;
@@ -11,5 +11,8 @@
 .imagePreview {
   width: 100px;
   height: 100px;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 8px;
+  display: block;
 }

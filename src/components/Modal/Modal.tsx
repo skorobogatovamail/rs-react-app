@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Button } from '../Button/Button';
+
 import styles from './Modal.module.css';
 
 type ModalProps = {
@@ -59,7 +60,7 @@ export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
       >
         {children}
 
-        <Button aria-label="Close" onClick={onClose}>
+        <Button aria-label="Close" onClick={onClose} className={styles.button}>
           Close
         </Button>
       </div>
