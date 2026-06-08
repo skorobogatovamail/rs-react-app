@@ -8,14 +8,19 @@ export const FormSubmissionResult = ({
   email,
   gender,
   acceptTerms,
+  image,
 }: FormSubmission) => {
   return (
     <div className={styles.container}>
-      <div>name: {name}</div>
-      <div>age: {age}</div>
-      <div>email: {email}</div>
-      <div>gender: {gender}</div>
-      <div>acceptTerms: {acceptTerms ? 'yes' : 'no'}</div>
+      <div className={styles.textContent}>
+        <div>name: {name}</div>
+        <div>age: {age}</div>
+        <div>email: {email}</div>
+        <div>gender: {gender}</div>
+        <div>acceptTerms: {acceptTerms ? 'yes' : 'no'}</div>
+      </div>
+
+      {image && <img src={image} alt="uploaded" className={styles.image}></img>}
     </div>
   );
 };

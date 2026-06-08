@@ -6,6 +6,8 @@ export interface FormSubmission {
   email: string;
   gender: string;
   acceptTerms: boolean;
+  image: string;
+  // country: string;
 }
 
 interface FormSubmissionsSliceState {

@@ -2,6 +2,7 @@ import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
 import { FormField } from './FormField/FormField';
 import { GenderSelect } from './GenderSelect/GenderSelect';
+import { useFileUpload } from './hooks/useFileUpload';
 import { useFormSubmission } from './hooks/useFormSubmission';
 import { getFormStringValue } from './utils/getFormStringValue';
 
@@ -13,19 +14,30 @@ interface IFormProps {
 
 export const UncontrolledForm = ({ onSave }: IFormProps) => {
   const { submit } = useFormSubmission(onSave);
+  const { processFile, fileError } = useFileUpload();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const file = formData.get('image') as File;
+    const imageBase64 = file ? await processFile(file) : '';
+
+    if (file?.size && !imageBase64) return;
+
     submit({
       name: getFormStringValue(formData, 'name'),
       age: getFormStringValue(formData, 'age'),
       email: getFormStringValue(formData, 'email'),
       gender: getFormStringValue(formData, 'gender'),
       acceptTerms: formData.get('acceptTerms') === 'on',
+      image: imageBase64 ?? '',
+      // country: getFormStringValue(formData, 'country'),
     });
 
-    e.currentTarget.reset();
+    form.reset();
   };
 
   return (
@@ -52,6 +64,19 @@ export const UncontrolledForm = ({ onSave }: IFormProps) => {
           id="uncontrolled-acceptTerms"
           name="acceptTerms"
           type="checkbox"
+        />
+      </FormField>
+
+      <FormField
+        id="uncontrolled-image"
+        label="Image"
+        error={fileError ?? undefined}
+      >
+        <input
+          id="uncontrolled-image"
+          type="file"
+          accept="image/png, image/jpeg"
+          name="image"
         />
       </FormField>
 

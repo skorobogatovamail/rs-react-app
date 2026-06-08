@@ -7,3 +7,9 @@
   padding: 20px;
   border-radius: 12px;
 }
+
+.imagePreview {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}

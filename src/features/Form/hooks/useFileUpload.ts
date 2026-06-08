@@ -1,0 +1,23 @@
+import { useState } from 'react';
+
+import { fileToBase64 } from '../utils/fileToBase64';
+import { validateImageFile } from '../utils/validateImageFile';
+
+export const useFileUpload = () => {
+  const [fileError, setFileError] = useState();
+
+  const processFile = async (file: File | null): Promise<string | null> => {
+    if (!file) return null;
+
+    const error = validateImageFile(file);
+
+    if (error) {
+      setFileError(error);
+      return;
+    }
+
+    return fileToBase64(file);
+  };
+
+  return { processFile, fileError };
+};
