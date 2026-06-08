@@ -84,7 +84,15 @@ export const HookForm = ({ onSave }: IFormProps) => {
         <Controller
           name="acceptTerms"
           control={control}
-          render={({ field }) => <Input {...field} id="rhf-acceptTerms" />}
+          render={({ field: { value, onChange, ...field } }) => (
+            <input
+              {...field}
+              type="checkbox"
+              id="rhf-acceptTerms"
+              checked={value}
+              onChange={(e) => onChange(e.target.checked)}
+            />
+          )}
         />
       </FormField>
 
