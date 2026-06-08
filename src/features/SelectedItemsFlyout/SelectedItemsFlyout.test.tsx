@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { CardType } from '../../components/Card/Card';
-import { toggleItem } from '../../store/selectedItemsSlice';
+import { toggleItem } from '../../store/slices/selectedItemsSlice';
 import { setupStore } from '../../store/store';
 import { SelectedItemsFlyout } from './SelectedItemsFlyout';
 

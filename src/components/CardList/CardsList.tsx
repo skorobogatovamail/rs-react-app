@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from 'react-router';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { toggleItem } from '../../store/selectedItemsSlice';
-import { selectSelectedItemsMap } from '../../store/selectors';
+import { selectSelectedItemsMap } from '../../store/selectors/selectedItemsSelectors';
+import { toggleItem } from '../../store/slices/selectedItemsSlice';
 import type { CardType } from '../Card/Card';
 import { Card } from '../Card/Card';
 import styles from './CardsList.module.css';

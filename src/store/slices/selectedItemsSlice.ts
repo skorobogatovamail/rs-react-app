@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { CardType } from '../components/Card/Card';
+import type { CardType } from '../../components/Card/Card';
 
 export type SelectedItemsSliceState = {
   selectedItems: Record<number, CardType>;

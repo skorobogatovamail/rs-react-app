@@ -1,0 +1,17 @@
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}

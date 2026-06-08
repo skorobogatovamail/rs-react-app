@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import type { CardType } from '../components/Card/Card';
+import type { CardType } from '../../components/Card/Card';
+import {
+  selectSelectedCount,
+  selectSelectedItemsList,
+} from '../selectors/selectedItemsSelectors';
+import { setupStore } from '../store';
 import {
   clearAll,
   removeItem,
   selectedItemsSlice,
   toggleItem,
 } from './selectedItemsSlice';
-import { selectSelectedCount, selectSelectedItemsList } from './selectors';
-import { setupStore } from './store';
 
 const mockItem: CardType = {
   id: 1,

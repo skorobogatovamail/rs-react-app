@@ -34,8 +34,28 @@ export default defineConfig([
     },
     rules: {
       'react/prop-types': 'off',
-      'simple-import-sort/imports': 'error',
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            ['^\\u0000'],
+            ['^node:'],
+            ['^@?\\w'],
+            ['^'],
+            ['^\\.(?!.*\\.css$)'],
+            ['\\.css$'],
+          ],
+        },
+      ],
       'simple-import-sort/exports': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ]);

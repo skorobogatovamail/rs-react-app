@@ -47,7 +47,7 @@ export const Results: React.FC<ResultsProps> = ({
 
   return (
     <div onClick={onClick} className={styles.container}>
-      <h2 className={styles.title}>Results</h2>
+      <h2 className={styles.title}>Search Results</h2>
       <CardsList items={items} />
     </div>
   );

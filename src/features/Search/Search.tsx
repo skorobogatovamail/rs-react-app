@@ -1,17 +1,20 @@
 import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
+
 import styles from './Search.module.css';
 
 type SearchProps = {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | number) => void;
   onSubmit: () => void;
+  onRefresh: () => void;
 };
 
 export const Search: React.FC<SearchProps> = ({
   value,
   onChange,
   onSubmit,
+  onRefresh,
 }) => {
   return (
     <form
@@ -22,7 +25,12 @@ export const Search: React.FC<SearchProps> = ({
       }}
     >
       <Input value={value} onChange={onChange} placeholder="Search" />
-      <Button type="submit">Search</Button>
+      <Button className={styles.searchButton} type="submit">
+        Search
+      </Button>
+      <Button className={styles.refreshButton} onClick={onRefresh}>
+        Refresh
+      </Button>
     </form>
   );
 };
