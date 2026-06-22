@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '../../src/components/Button/Button';
 import { Layout } from '../../src/components/Layout/Layout';
 import { Link } from '../../src/i18n/routing';
-import styles from '../../src/pages/NotFoundPage/NotFoundPage.module.css';
+import styles from '../../src/styles/NotFoundPage.module.css';
 
 export default function NotFound() {
   const t = useTranslations('NotFound');

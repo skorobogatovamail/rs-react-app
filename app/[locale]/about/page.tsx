@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 import { Layout } from '../../../src/components/Layout/Layout';
-import styles from '../../../src/pages/AboutPage/AboutPage.module.css';
+import styles from '../../../src/styles/AboutPage.module.css';
 
 const RS_SCHOOL_REACT_URL = 'https://rs.school/courses/reactru';
 const GITHUB_URL = 'https://github.com/skorobogatovamail';

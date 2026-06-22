@@ -7,8 +7,8 @@ import { Pagination } from '../../src/features/Pagination/Pagination';
 import { Results } from '../../src/features/Results/Results';
 import { Search } from '../../src/features/Search/Search';
 import { redirect } from '../../src/i18n/routing';
-import styles from '../../src/pages/MainPage/MainPage.module.css';
 import { getCharacterDetails, getCharacters } from '../../src/services/api';
+import styles from '../../src/styles/MainPage.module.css';
 
 type Props = {
   params: Promise<{ locale: string }>;
