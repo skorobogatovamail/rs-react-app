@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useTranslations } from 'next-intl';
 
 import type { CardType } from '../../components/Card/Card';
 import { CardsList } from '../../components/CardList/CardsList';
@@ -7,23 +8,20 @@ import styles from './Results.module.css';
 
 type ResultsProps = {
   items: CardType[];
-  isLoading: boolean;
-  error: string | null;
-  onClick?: (e: React.MouseEvent) => void;
+  isLoading?: boolean;
+  error?: string | null;
 };
 
 export const Results: React.FC<ResultsProps> = ({
   items,
   isLoading,
   error,
-  onClick,
 }) => {
+  const t = useTranslations('Main');
+
   if (isLoading) {
     return (
-      <div
-        onClick={onClick}
-        className={cn(styles.loaderContainer, styles.container)}
-      >
+      <div className={cn(styles.loaderContainer, styles.container)}>
         <Loader />
       </div>
     );
@@ -31,7 +29,7 @@ export const Results: React.FC<ResultsProps> = ({
 
   if (error) {
     return (
-      <div onClick={onClick} className={styles.container}>
+      <div className={styles.container}>
         <h3 className={styles.title}>Error: {error}</h3>
       </div>
     );
@@ -39,15 +37,15 @@ export const Results: React.FC<ResultsProps> = ({
 
   if (items.length === 0) {
     return (
-      <div onClick={onClick} className={styles.container}>
-        <h3 className={styles.title}>No results found</h3>
+      <div className={styles.container}>
+        <h3 className={styles.title}>{t('noResults')}</h3>
       </div>
     );
   }
 
   return (
-    <div onClick={onClick} className={styles.container}>
-      <h2 className={styles.title}>Results</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>{t('search')}</h2>
       <CardsList items={items} />
     </div>
   );

@@ -6,8 +6,8 @@ type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   'onChange' | 'value'
 > & {
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -22,7 +22,7 @@ export const Input: React.FC<InputProps> = ({
         {...inputProps}
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange?.(e.target.value)}
         className={classNames(styles.input, className)}
       />
     </div>

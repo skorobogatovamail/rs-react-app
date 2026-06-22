@@ -45,6 +45,15 @@
   cursor: pointer;
 }
 
+.localeSwitcher select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
 .nav {
   display: flex;
   gap: 16px;

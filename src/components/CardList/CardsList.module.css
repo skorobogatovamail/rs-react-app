@@ -8,3 +8,11 @@
   display: flex;
   justify-content: center;
 }
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

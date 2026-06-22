@@ -1,35 +1,44 @@
-import cn from 'classnames';
-import { useParams } from 'react-router';
+'use client';
 
-import { Button } from '../../components/Button/Button';
+import cn from 'classnames';
+import { useSearchParams } from 'next/navigation';
+
+import type { CardType } from '../../components/Card/Card';
 import { Card } from '../../components/Card/Card';
 import { Loader } from '../../components/Loader/Loader';
-import { rickAndMortyApi } from '../../services/rickAndMorty';
-import { useAppDispatch } from '../../store/hooks';
+import { Link, usePathname } from '../../i18n/routing';
 import styles from './DetailsPanel.module.css';
-import { useCloseDetails } from './hooks/useCloseDetails';
-import { useGetDetails } from './hooks/useGetDetails';
 
-export const DetailsPanel = () => {
-  const { id } = useParams();
+type DetailsPanelProps = {
+  item?: CardType;
+  isLoading?: boolean;
+  error?: string | null;
+  onRefresh?: () => void;
+};
 
-  const handleCloseDetails = useCloseDetails();
+export const DetailsPanel: React.FC<DetailsPanelProps> = ({
+  item,
+  isLoading,
+  error,
+  onRefresh,
+}) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
-  const { item, isLoading, error } = useGetDetails(id ?? '');
-  const dispatch = useAppDispatch();
-
-  function handleRefresh() {
-    dispatch(rickAndMortyApi.util.invalidateTags([{ type: 'Character', id }]));
-  }
+  const getCloseHref = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('details');
+    return `${pathname}?${params.toString()}`;
+  };
 
   if (isLoading) {
     return (
       <div className={styles.wrapper}>
         <div className={cn(styles.loaderContainer, styles.container)}>
           <Loader />
-          <Button aria-label="Close details" onClick={handleCloseDetails}>
+          <Link href={getCloseHref()} className={styles.closeButton}>
             Close
-          </Button>
+          </Link>
         </div>
       </div>
     );
@@ -40,9 +49,9 @@ export const DetailsPanel = () => {
       <div className={styles.wrapper}>
         <div className={styles.container}>
           <h3 className={styles.title}>Error: {error}</h3>
-          <Button aria-label="Close details" onClick={handleCloseDetails}>
+          <Link href={getCloseHref()} className={styles.closeButton}>
             Close
-          </Button>
+          </Link>
         </div>
       </div>
     );
@@ -53,9 +62,9 @@ export const DetailsPanel = () => {
       <div className={styles.wrapper}>
         <div className={styles.container}>
           <h3 className={styles.title}>No results found</h3>
-          <Button aria-label="Close details" onClick={handleCloseDetails}>
+          <Link href={getCloseHref()} className={styles.closeButton}>
             Close
-          </Button>
+          </Link>
         </div>
       </div>
     );
@@ -66,10 +75,16 @@ export const DetailsPanel = () => {
       <div className={styles.container}>
         <h2 className={styles.title}>Details</h2>
         <Card {...item} />
-        <Button aria-label="Close details" onClick={handleCloseDetails}>
-          Close
-        </Button>
-        <Button onClick={handleRefresh}>Refresh</Button>
+        <div className={styles.actions}>
+          <Link href={getCloseHref()} className={styles.closeButton}>
+            Close
+          </Link>
+          {onRefresh && (
+            <button onClick={onRefresh} className={styles.refreshButton}>
+              Refresh
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

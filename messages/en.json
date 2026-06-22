@@ -1,0 +1,28 @@
+{
+  "Header": {
+    "title": "Rick and Morty Search",
+    "home": "Home",
+    "about": "About"
+  },
+  "Main": {
+    "search": "Search",
+    "placeholder": "Search characters...",
+    "noResults": "No characters found",
+    "export": "Export to CSV",
+    "unselectAll": "Unselect all",
+    "itemsSelected": "{count, plural, =1 {# item selected} other {# items selected}}",
+    "throwError": "Throw error"
+  },
+  "About": {
+    "title": "About",
+    "author": "Author",
+    "name": "Name",
+    "github": "GitHub",
+    "course": "Course",
+    "description": "This application searches characters from the Rick and Morty API and displays results with pagination and a details panel."
+  },
+  "NotFound": {
+    "title": "404 - Page Not Found",
+    "goHome": "Go Home"
+  }
+}
