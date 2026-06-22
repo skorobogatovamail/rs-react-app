@@ -1,12 +1,11 @@
 import '../../src/index.css';
 
 import { notFound } from 'next/navigation';
-import { NextIntlClientProvider, useTranslations } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
-import { Button } from '../../src/components/Button/Button';
 import { ErrorBoundary } from '../../src/components/ErrorBoundary/ErrorBoundary';
-import styles from '../../src/components/ErrorBoundary/ErrorBoundary.module.css';
+import { ErrorFallback } from '../../src/components/ErrorBoundary/ErrorFallback';
 import StoreProvider from '../../src/components/StoreProvider';
 import { ThemeProvider } from '../../src/context/ThemeContext';
 import { routing } from '../../src/i18n/routing';
@@ -42,20 +41,5 @@ export default async function LocaleLayout({
 }
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
-  const t = useTranslations('NotFound');
-
-  return (
-    <ErrorBoundary
-      fallback={
-        <div className={styles.errorFallbackContainer}>
-          <h3>Error: Something went wrong. Please try again later.</h3>
-          <Button onClick={() => window.location.reload()}>
-            {t('goHome')}
-          </Button>
-        </div>
-      }
-    >
-      {children}
-    </ErrorBoundary>
-  );
+  return <ErrorBoundary fallback={<ErrorFallback />}>{children}</ErrorBoundary>;
 }
