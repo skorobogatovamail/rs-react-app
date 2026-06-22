@@ -6,7 +6,7 @@ export const getPaginationRange = (
   const range: (number | '...')[] = [];
 
   if (totalPages <= siblings) {
-    for (let i = 1; i < totalPages; i += 1) range.push(i);
+    for (let i = 1; i <= totalPages; i += 1) range.push(i);
 
     return range;
   }
@@ -22,7 +22,7 @@ export const getPaginationRange = (
     range.push('...');
   }
 
-  for (let i = leftSiblingIndex; i < rightSiblingIndex; i += 1) range.push(i);
+  for (let i = leftSiblingIndex; i <= rightSiblingIndex; i += 1) range.push(i);
 
   if (showRightDots) {
     range.push('...');

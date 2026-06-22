@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import { TestProviders } from '../../test-utils/TestProviders';
@@ -9,15 +8,14 @@ describe('Layout Component', () => {
   it('renders header and children', () => {
     render(
       <TestProviders>
-        <MemoryRouter>
-          <Layout>
-            <div>Child Content</div>
-          </Layout>
-        </MemoryRouter>
+        <Layout>
+          <div>Child Content</div>
+        </Layout>
       </TestProviders>
     );
 
-    expect(screen.getByText('Search Engine App')).toBeInTheDocument();
+    // Header title is now localized, mock returns the key
+    expect(screen.getByText('title')).toBeInTheDocument();
     expect(screen.getByText('Child Content')).toBeInTheDocument();
   });
 });

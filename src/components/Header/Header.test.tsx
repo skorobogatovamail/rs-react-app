@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import { TestProviders } from '../../test-utils/TestProviders';
@@ -8,9 +7,7 @@ import { Header } from './Header';
 const renderHeader = (title: string) =>
   render(
     <TestProviders>
-      <MemoryRouter>
-        <Header title={title} />
-      </MemoryRouter>
+      <Header title={title} />
     </TestProviders>
   );
 
@@ -23,13 +20,14 @@ describe('Header Component', () => {
 
   it('renders navigation links', () => {
     renderHeader('Search Engine App');
-    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute(
+    // The link names come from the mock useTranslations which returns the key
+    expect(screen.getByRole('link', { name: 'home' })).toHaveAttribute(
       'href',
-      '/'
+      '/en'
     );
-    expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'about' })).toHaveAttribute(
       'href',
-      '/about'
+      '/en/about'
     );
   });
 

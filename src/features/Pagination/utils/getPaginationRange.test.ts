@@ -4,7 +4,7 @@ import { getPaginationRange } from './getPaginationRange';
 
 describe('getPaginationRange', () => {
   it('returns all pages when total is small', () => {
-    expect(getPaginationRange(1, 2)).toEqual([1]);
+    expect(getPaginationRange(1, 2)).toEqual([1, 2]);
   });
 
   it('includes dots and edge pages for large ranges', () => {

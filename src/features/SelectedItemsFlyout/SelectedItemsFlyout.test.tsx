@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CardType } from '../../components/Card/Card';
 import { toggleItem } from '../../store/selectedItemsSlice';
 import { setupStore } from '../../store/store';
+import { TestProviders } from '../../test-utils/TestProviders';
 import { SelectedItemsFlyout } from './SelectedItemsFlyout';
 
 const mockItem: CardType = {
@@ -15,23 +16,25 @@ const mockItem: CardType = {
   link: 'https://rickandmortyapi.com/api/character/1',
 };
 
-vi.mock('../../utils/downloadCsv', () => ({
-  downloadSelectedItemsAsCsv: vi.fn(),
-}));
-
-import { downloadSelectedItemsAsCsv } from '../../utils/downloadCsv';
-
 describe('SelectedItemsFlyout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({ ok: true, blob: () => Promise.resolve(new Blob()) })
+      )
+    );
   });
 
   it('does not render when no items are selected', () => {
     const store = setupStore();
     const { container } = render(
-      <Provider store={store}>
-        <SelectedItemsFlyout />
-      </Provider>
+      <TestProviders>
+        <Provider store={store}>
+          <SelectedItemsFlyout />
+        </Provider>
+      </TestProviders>
     );
     expect(container).toBeEmptyDOMElement();
   });
@@ -40,43 +43,54 @@ describe('SelectedItemsFlyout', () => {
     const store = setupStore();
     store.dispatch(toggleItem(mockItem));
     render(
-      <Provider store={store}>
-        <SelectedItemsFlyout />
-      </Provider>
+      <TestProviders>
+        <Provider store={store}>
+          <SelectedItemsFlyout />
+        </Provider>
+      </TestProviders>
     );
 
-    expect(screen.getByText('1 item selected')).toBeInTheDocument();
+    // mock useTranslations returns the key with count
+    expect(screen.getByText('itemsSelected')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Unselect all' })
+      screen.getByRole('button', { name: 'unselectAll' })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Download' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'export' })).toBeInTheDocument();
   });
 
   it('clears all selections when Unselect all is clicked', () => {
     const store = setupStore();
     store.dispatch(toggleItem(mockItem));
     render(
-      <Provider store={store}>
-        <SelectedItemsFlyout />
-      </Provider>
+      <TestProviders>
+        <Provider store={store}>
+          <SelectedItemsFlyout />
+        </Provider>
+      </TestProviders>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Unselect all' }));
+    fireEvent.click(screen.getByRole('button', { name: 'unselectAll' }));
     expect(store.getState().selectedItems.selectedItems[1]).toBeUndefined();
   });
 
-  it('downloads csv when Download is clicked', () => {
+  it('calls fetch when Download is clicked', () => {
     const store = setupStore();
     store.dispatch(toggleItem(mockItem));
     render(
-      <Provider store={store}>
-        <SelectedItemsFlyout />
-      </Provider>
+      <TestProviders>
+        <Provider store={store}>
+          <SelectedItemsFlyout />
+        </Provider>
+      </TestProviders>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Download' }));
-    expect(downloadSelectedItemsAsCsv).toHaveBeenCalledWith([mockItem]);
+    fireEvent.click(screen.getByRole('button', { name: 'export' }));
+    expect(global.fetch).toHaveBeenCalledWith(
+      '/api/csv',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ items: [mockItem] }),
+      })
+    );
   });
 });

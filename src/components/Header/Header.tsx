@@ -1,7 +1,10 @@
+'use client';
+
 import classNames from 'classnames';
-import { NavLink } from 'react-router';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { useTheme } from '../../context/useTheme';
+import { Link, usePathname, useRouter } from '../../i18n/routing';
 import styles from './Header.module.css';
 
 type HeaderProps = {
@@ -10,6 +13,15 @@ type HeaderProps = {
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
   const { theme, setTheme } = useTheme();
+  const t = useTranslations('Header');
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const onLocaleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const nextLocale = e.target.value;
+    router.replace(pathname, { locale: nextLocale });
+  };
 
   return (
     <header className={styles.header}>
@@ -38,24 +50,35 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             Dark
           </label>
         </fieldset>
+
+        <div className={styles.localeSwitcher}>
+          <label>
+            <select value={locale} onChange={onLocaleChange}>
+              <option value="en">EN</option>
+              <option value="ru">RU</option>
+            </select>
+          </label>
+        </div>
+
         <nav className={styles.nav} aria-label="Main navigation">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              classNames(styles.navLink, isActive && styles.navLinkActive)
-            }
+          <Link
+            href="/"
+            className={classNames(
+              styles.navLink,
+              pathname === '/' && styles.navLinkActive
+            )}
           >
-            Home
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              classNames(styles.navLink, isActive && styles.navLinkActive)
-            }
+            {t('home')}
+          </Link>
+          <Link
+            href="/about"
+            className={classNames(
+              styles.navLink,
+              pathname === '/about' && styles.navLinkActive
+            )}
           >
-            About
-          </NavLink>
+            {t('about')}
+          </Link>
         </nav>
       </div>
     </header>

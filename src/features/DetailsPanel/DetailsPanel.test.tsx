@@ -1,78 +1,56 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
-import { type AppStore, setupStore } from '../../store/store';
-import { createMockResponse } from '../../test-utils/createMockResponse';
+import { TestProviders } from '../../test-utils/TestProviders';
 import { DetailsPanel } from './DetailsPanel';
 
-const mockCharacter = {
+const mockItem = {
   id: 1,
-  name: 'Rick Sanchez',
-  species: 'Human',
+  title: 'Rick Sanchez',
+  description: 'Human',
   image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-  url: 'https://rickandmortyapi.com/api/character/1',
+  link: 'https://rickandmortyapi.com/api/character/1',
 };
 
-let store: AppStore;
-
-const renderDetailsPanel = (id = '1') =>
-  render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[`/details/${id}`]}>
-        <Routes>
-          <Route path="/details/:id" element={<DetailsPanel />} />
-          <Route path="/" element={<div>Home</div>} />
-        </Routes>
-      </MemoryRouter>
-    </Provider>
-  );
-
 describe('DetailsPanel', () => {
-  beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn());
-    vi.mocked(fetch).mockImplementation(() =>
-      Promise.resolve(createMockResponse(mockCharacter))
+  it('shows character details when item is provided', () => {
+    render(
+      <TestProviders>
+        <DetailsPanel item={mockItem} />
+      </TestProviders>
     );
-    store = setupStore();
+
+    expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+    expect(screen.getByText('Human')).toBeInTheDocument();
   });
 
-  it('shows loader then character details', async () => {
-    renderDetailsPanel();
+  it('shows loader when isLoading is true', () => {
+    render(
+      <TestProviders>
+        <DetailsPanel isLoading={true} />
+      </TestProviders>
+    );
 
     expect(screen.getByTestId('loader')).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
-    });
   });
 
-  it('shows error when fetch fails', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      createMockResponse({ error: 'Not found' }, { status: 404, ok: false })
+  it('shows error message when error is provided', () => {
+    render(
+      <TestProviders>
+        <DetailsPanel error="Failed to fetch" />
+      </TestProviders>
     );
 
-    renderDetailsPanel();
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole('heading', { name: /failed to fetch character/i })
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByText('Error: Failed to fetch')).toBeInTheDocument();
   });
 
-  it('navigates home when close is clicked', async () => {
-    renderDetailsPanel();
+  it('shows "no results found" when no item is provided and not loading', () => {
+    render(
+      <TestProviders>
+        <DetailsPanel />
+      </TestProviders>
+    );
 
-    await waitFor(() => {
-      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByRole('button', { name: /close details/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText('Home')).toBeInTheDocument();
-    });
+    expect(screen.getByText('No results found')).toBeInTheDocument();
   });
 });

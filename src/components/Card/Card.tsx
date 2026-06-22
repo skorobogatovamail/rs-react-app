@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import Image from 'next/image';
 
 import styles from './Card.module.css';
 
@@ -13,7 +14,6 @@ export type CardType = {
 type CardProps = CardType & {
   isSelected?: boolean;
   onSelectChange?: (checked: boolean) => void;
-  onCardClick?: () => void;
 };
 
 export const Card: React.FC<CardProps> = ({
@@ -22,7 +22,6 @@ export const Card: React.FC<CardProps> = ({
   image,
   isSelected = false,
   onSelectChange,
-  onCardClick,
 }) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -33,27 +32,8 @@ export const Card: React.FC<CardProps> = ({
     e.stopPropagation();
   };
 
-  const handleCardClick = () => {
-    onCardClick?.();
-  };
-
   return (
-    <div
-      className={cn(styles.container, isSelected && styles.selected)}
-      onClick={onCardClick ? handleCardClick : undefined}
-      onKeyDown={
-        onCardClick
-          ? (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleCardClick();
-              }
-            }
-          : undefined
-      }
-      role={onCardClick ? 'button' : undefined}
-      tabIndex={onCardClick ? 0 : undefined}
-    >
+    <div className={cn(styles.container, isSelected && styles.selected)}>
       {onSelectChange && (
         <label className={styles.checkboxLabel} onClick={handleCheckboxClick}>
           <input
@@ -66,7 +46,9 @@ export const Card: React.FC<CardProps> = ({
           />
         </label>
       )}
-      <img src={image} alt={title} />
+      <div className={styles.imageContainer}>
+        <Image src={image} alt={title} width={300} height={300} />
+      </div>
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
