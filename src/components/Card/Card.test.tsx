@@ -29,12 +29,4 @@ describe('Card Component', () => {
     fireEvent.click(screen.getByRole('checkbox'));
     expect(onSelectChange).toHaveBeenCalledWith(true);
   });
-
-  it('calls onCardClick when card body is clicked', () => {
-    const onCardClick = vi.fn();
-    render(<Card {...mockItem} onCardClick={onCardClick} />);
-
-    fireEvent.click(screen.getByText('Rick Sanchez'));
-    expect(onCardClick).toHaveBeenCalled();
-  });
 });

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { TestProviders } from '../../test-utils/TestProviders';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
 import { ErrorButton } from './ErrorButton';
 
@@ -10,12 +11,15 @@ describe('ErrorButton Component', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
-      <ErrorBoundary fallback={<div>Fallback UI</div>}>
-        <ErrorButton />
-      </ErrorBoundary>
+      <TestProviders>
+        <ErrorBoundary fallback={<div>Fallback UI</div>}>
+          <ErrorButton />
+        </ErrorBoundary>
+      </TestProviders>
     );
 
-    const button = screen.getByRole('button', { name: /throw error/i });
+    // Mock useTranslations returns the key
+    const button = screen.getByRole('button', { name: 'throwError' });
     fireEvent.click(button);
 
     expect(screen.getByText('Fallback UI')).toBeInTheDocument();

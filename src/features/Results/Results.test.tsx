@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import { TestProviders } from '../../test-utils/TestProviders';
@@ -8,9 +7,7 @@ import { Results } from './Results';
 const renderResults = (props: React.ComponentProps<typeof Results>) =>
   render(
     <TestProviders>
-      <MemoryRouter>
-        <Results {...props} />
-      </MemoryRouter>
+      <Results {...props} />
     </TestProviders>
   );
 
@@ -34,7 +31,8 @@ const mockItems = [
 describe('Results Component', () => {
   it('renders correct number of items when data is provided', () => {
     renderResults({ items: mockItems, isLoading: false, error: null });
-    expect(screen.getByText('Results')).toBeInTheDocument();
+    // Title is now localized, mock returns the key
+    expect(screen.getByText('search')).toBeInTheDocument();
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2);
@@ -42,7 +40,8 @@ describe('Results Component', () => {
 
   it('displays "no results found" message when data array is empty', () => {
     renderResults({ items: [], isLoading: false, error: null });
-    expect(screen.getByText('No results found')).toBeInTheDocument();
+    // Message is now localized, mock returns the key
+    expect(screen.getByText('noResults')).toBeInTheDocument();
   });
 
   it('shows loading state while fetching data', () => {

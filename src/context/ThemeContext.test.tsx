@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { ThemeProvider } from './ThemeContext';
 import { useTheme } from './useTheme';
@@ -21,6 +21,11 @@ const ThemeConsumer = () => {
 };
 
 describe('ThemeContext', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
+
   it('provides light theme by default', () => {
     render(
       <ThemeProvider>
@@ -59,6 +64,9 @@ describe('ThemeContext', () => {
   });
 
   it('throws when useTheme is used outside provider', () => {
+    // Suppress console.error for this test as we expect an error
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
     const BrokenConsumer = () => {
       useTheme();
       return null;
@@ -67,5 +75,7 @@ describe('ThemeContext', () => {
     expect(() => render(<BrokenConsumer />)).toThrow(
       'useTheme must be used within ThemeProvider'
     );
+
+    consoleSpy.mockRestore();
   });
 });

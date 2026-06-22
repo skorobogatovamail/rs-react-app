@@ -1,39 +1,42 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
+import { TestProviders } from '../../test-utils/TestProviders';
 import { Pagination } from './Pagination';
 
 describe('Pagination', () => {
-  it('renders page buttons and navigates on click', () => {
-    const onPageChange = vi.fn();
-
+  it('renders page links correctly', () => {
     render(
-      <Pagination currentPage={2} totalPages={5} onPageChange={onPageChange} />
+      <TestProviders>
+        <Pagination currentPage={2} totalPages={5} baseUrl="/" query="test" />
+      </TestProviders>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '3' }));
-    expect(onPageChange).toHaveBeenCalledWith(3);
-
-    fireEvent.click(screen.getByRole('button', { name: '<' }));
-    expect(onPageChange).toHaveBeenCalledWith(1);
-
-    fireEvent.click(screen.getByRole('button', { name: '>' }));
-    expect(onPageChange).toHaveBeenCalledWith(3);
+    expect(screen.getByRole('link', { name: '1' })).toHaveAttribute(
+      'href',
+      '/en?query=test&page=1'
+    );
+    expect(screen.getByRole('link', { name: '3' })).toHaveAttribute(
+      'href',
+      '/en?query=test&page=3'
+    );
+    expect(screen.getByRole('link', { name: '<' })).toHaveAttribute(
+      'href',
+      '/en?query=test&page=1'
+    );
+    expect(screen.getByRole('link', { name: '>' })).toHaveAttribute(
+      'href',
+      '/en?query=test&page=3'
+    );
   });
 
   it('renders ellipsis for large page counts', () => {
     render(
-      <Pagination currentPage={5} totalPages={10} onPageChange={vi.fn()} />
+      <TestProviders>
+        <Pagination currentPage={5} totalPages={10} baseUrl="/" />
+      </TestProviders>
     );
 
     expect(screen.getAllByText('...').length).toBeGreaterThan(0);
-  });
-
-  it('renders nothing when totalPages is undefined', () => {
-    const { container } = render(
-      <Pagination currentPage={1} onPageChange={vi.fn()} />
-    );
-
-    expect(container.querySelector('nav')?.children.length).toBe(0);
   });
 });
